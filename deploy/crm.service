@@ -1,0 +1,25 @@
+[Unit]
+Description=Mini CRM
+After=network.target
+
+[Service]
+User=minicrm
+Group=minicrm
+WorkingDirectory=/opt/mini-crm
+Environment=CRM_DB=/var/lib/mini-crm/crm.db
+Environment=CRM_HOST=127.0.0.1
+Environment=PYTHONDONTWRITEBYTECODE=1
+# пароль, порт и токен бота лежат в /etc/mini-crm.env, его пишет setup.sh
+EnvironmentFile=/etc/mini-crm.env
+ExecStart=/usr/bin/python3 /opt/mini-crm/server.py
+Restart=always
+RestartSec=3
+# сервис видит на запись только свою базу: на сервере живут и другие проекты
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/mini-crm
+
+[Install]
+WantedBy=multi-user.target
